@@ -11,16 +11,16 @@
 //entrada y salida de datos 1 
 const eleccionViaje = () =>{
     
-    let paqueteViaje = ``;
+    let paqueteViaje = "";
 
-    while ((!isNaN(paqueteViaje)) || (paqueteViaje.trim()=== ``) || ((paqueteViaje !==`norte`) && (paqueteViaje !==`centro`) && (paqueteViaje !==`sur`))){
+    while ((!isNaN(paqueteViaje)) || (paqueteViaje.trim()=== "") || ((paqueteViaje !=="norte") && (paqueteViaje !=="centro") && (paqueteViaje !=="sur"))){
         paqueteViaje = prompt(`ingrese que el destino donde usted quiere viajar dentro del pais \n\n *Norte \n *Centro \n *Sur`).toLowerCase();
     }
 
     const zonaViaje = viajes.filter(elementos => elementos.zona === paqueteViaje);
 
     if(zonaViaje.length > 0){
-        let salida1= ``;
+        let salida1= "";
         
         zonaViaje.forEach(elemento =>{(salida1+=`Destino: ${elemento.destino}.\n Duracion: ${elemento.duracion}. \n Pasaje: ${elemento.boleto}. \n Hospedaje: ${elemento.hospedaje}. \n Precio :  $${elemento.precio}. \n Zona: ${elemento.zona}. \n\n`)});
 
@@ -28,7 +28,7 @@ const eleccionViaje = () =>{
 
         let destinoZonaViaje = prompt(`Ingrese que paquete de viaje desea contratar, eligiendo acorde a la zona (${paqueteViaje}) que ingreso.`).toLocaleLowerCase();
 
-        while ((!isNaN(destinoZonaViaje)) || (destinoZonaViaje.trim()===``)){
+        while ((!isNaN(destinoZonaViaje)) || (destinoZonaViaje.trim()==="")){
             destinoZonaViaje = prompt(`Ingrese que paquete de viaje desea contratar, eligiendo acorde a la zona (${paqueteViaje}) que ingreso.`).toLocaleLowerCase();
         }
 
@@ -37,7 +37,7 @@ const eleccionViaje = () =>{
         let salida2=``;
 
         for (const elemento in destinoViajeFinal) {
-            salida2+= elemento+`: `+destinoViajeFinal[elemento]+`\n`;
+            salida2+= elemento+" "+destinoViajeFinal[elemento]+`\n`;
         }
 
         alert(`Felicitaciones usted ha elegido con exito (${destinoZonaViaje}) como paquete de viaje!!! \n\n ${salida2}`);
@@ -47,7 +47,7 @@ const eleccionViaje = () =>{
         return resultado
 
     }else{
-        alert(`Ingreso datos incorrectos,vuelva a repetir el proceso`);
+        alert("Ingreso datos incorrectos,vuelva a repetir el proceso");
     }
 }
 
@@ -58,24 +58,27 @@ const subTotal = (valor) =>{
     
     return (valor / 1.21).toFixed(2);
 }
-const efectivo = (valor) =>{
-    
-    return (valor * 0.8).toFixed(2);
-}
-const cuotas = (valor) =>{
-    
-    return (valor * 1.10).toFixed(2);
-}
-const ahora12 = (valor) =>{
 
-    return (valor * 1.20).toFixed(2);
-}
+const formaDePago = (pago, valor) => {
+    let totalValor =0;
+  
+    if (pago === "efectivo") {
+      totalValor = valor * 0.8;
+    } else if (pago === "cuotas") {
+      totalValor = valor * 1.10;
+    } else if (pago === "ahora 12") {
+      totalValor = valor * 1.20;
+    }
+  
+    return totalValor;
+  }
+
 
 
 //entrada y salida de datos 2
 const datosPasaporte = () =>{
     
-    alert(`Completa los siguientes campos de informacion para ir generando su pasaporte!`);
+    alert("Completa los siguientes campos de informacion para ir generando su pasaporte!");
 
     let nombrePasajero= prompt(`Ingrese su nombre completo.`).toLocaleLowerCase();
     let apellidoPasajero= prompt(`Ingrese su apellido.`).toLocaleLowerCase();
@@ -92,7 +95,7 @@ const datosPasaporte = () =>{
     viaje.provincia = `${provincia}.`;
     viaje.ciudad= `${ciudadSalida}.`;
     viaje.codigoPostal=`${codigoPostal}.`;
-    viaje.Iva=21+`.`;
+    viaje.Iva=21+".";
     viaje.Subtotal = `(${subTotal(viaje.precio)}).`;
 
     return viaje;
@@ -112,31 +115,33 @@ const recorridoPasaporte = () =>{
 let total;
 while(isNaN(total)){
 
-    total = parseInt(prompt(`ingrese forma de pago para conocer el monto final del paquete contratado \n\n *(Inserte (1) si su pago es en Efectivo).\n *(Inserte (2) si su pago es en 3 o 6 pagos). \n *(inserte  (3) si su pago es en Ahora 12).`));
+    total = parseInt(prompt(`ingrese forma de pago para conocer el monto final del paquete contratado \n\n *(Inserte Efectivo, si su pago es en Efectivo).\n *(Inserte cuotas si su pago es en 3 o 6 pagos). \n *(inserte  Ahora 12 si su pago es en Ahora 12).`)).toLocaleLowerCase();
 }
 
-let salida3 =``;
+let salida3 ="";
 
 let lista = recorridoPasaporte();
 
-if(total === 1){
+let montoFinal = formaDePago(total,pasaporte.precio);
+
+if(total === "efectivo"){
     
-    alert(`Usted debera a bonar la totalidad de $ (${efectivo(pasaporte.precio)}) contado efectivo, debito o credito en un pago.`);
+    alert(`Usted debera a bonar la totalidad de $ (${montoFinal}) contado efectivo, debito o credito en un pago.`);
     alert(`Felicitaciones (${pasaporte.nombre} ${pasaporte.apellido})  , su pago se ha adquirido con éxito. Muchas gracias por elegirnos, a continuacion le llegara su pasaporte!`);
     alert(`(PASAPORTE DEFILIPPI SPACETOUR) \n\n ${lista} \n`);
 
-}else if(total === 2){
-    alert(`Usted debera a bonar la totalidad de $ (${cuotas(pasaporte.precio)}) en 3 0 6 pagos.`);
+} else if(total === "cuotas"){
+    alert(`Usted debera a bonar la totalidad de $ (${montoFinal}) en 3 0 6 pagos.`);
     alert(`Felicitaciones (${pasaporte.nombre} ${pasaporte.apellido})  , su pago se ha adquirido con exito. Muchas gracias por elegirnos, a continuacion le llegara su pasaporte!`);
     alert(`(PASAPORTE DEFILIPPI SPACETOUR) \n\n ${lista} \n`);
 
-}else if(total === 3){
-    alert(`Usted debera a bonar la totalidad de $ (${ahora12(pasaporte.precio)}) en 12 cuotas.`);
+}else if(total === "ahora 12"){
+    alert(`Usted debera a bonar la totalidad de $ (${montoFinal}) en 12 cuotas.`);
     alert(`Felicitaciones (${pasaporte.nombre} ${pasaporte.apellido}) , su pago se ha adquirido con éxito. Muchas gracias por elegirnos, a continuacion le llegara su pasaporte!`);
     alert(`(PASAPORTE DEFILIPPI SPACETOUR) \n\n ${lista} \n`);
 }else{
     alert(`Ingreso datos incorrectos,vuelva a repetir el proceso`);
-}
+} 
 
 
 
